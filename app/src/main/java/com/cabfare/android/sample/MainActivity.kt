@@ -40,34 +40,34 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
-            else-> {
+            else -> {
                 findViewById<Button>(R.id.bt_rider_login)
-                        .setOnClickListener {
-                            showLoading()
-                            CBFRider.getInstance().signIn(this,
-                                    object : CabFareCallback<String> {
-                                        override
-                                        fun onSuccess(result: String) {
-                                            hideLoading()
-                                            pref.edit().putBoolean(Constants.KEY_IS_RIDER_LOGGED_IN, true).apply()
+                    .setOnClickListener {
+                        showLoading()
+                        CBFRider.getInstance().signIn(this,
+                            object : CabFareCallback<String> {
+                                override
+                                fun onSuccess(result: String) {
+                                    hideLoading()
+                                    pref.edit().putBoolean(Constants.KEY_IS_RIDER_LOGGED_IN, true).apply()
 
-                                            startActivity(Intent(this@MainActivity, RiderTripActivity::class.java))
-                                            finish()
-                                        }
+                                    startActivity(Intent(this@MainActivity, RiderTripActivity::class.java))
+                                    finish()
+                                }
 
-                                        override
-                                        fun onError(error: CabFareException) {
-                                            hideLoading()
-                                        }
-                                    }
-                            )
-                        }
+                                override
+                                fun onError(error: CabFareException) {
+                                    hideLoading()
+                                }
+                            }
+                        )
+                    }
 
                 findViewById<Button>(R.id.bt_driver_login)
-                        .setOnClickListener {
-                            startActivity(Intent(this@MainActivity, DriverLoginActivity::class.java))
-                            finish()
-                        }
+                    .setOnClickListener {
+                        startActivity(Intent(this@MainActivity, DriverLoginActivity::class.java))
+                        finish()
+                    }
             }
         }
     }
