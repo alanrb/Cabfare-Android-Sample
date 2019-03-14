@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1001981063472",
+    "firebase_url": "https://cabfare-8c6ca.firebaseio.com",
+    "project_id": "cabfare-8c6ca",
+    "storage_bucket": "cabfare-8c6ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001981063472:android:d0d39047a7a3987f",
+        "android_client_info": {
+          "package_name": "com.cabfare.android.sample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001981063472-9fud79i96usm1t53tu4ki59pp6q27f8q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0WIPxY9V9p2OyCVbq3cyS4PabMCzCXA0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

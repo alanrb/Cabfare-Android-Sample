@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Cabfare</string>
+    <string name="msg_trip_not_found">No Current Journey\n\nWhen on a Cabfare journey your driver and journey information will appear here.</string>
+    <string name="msg_trip_start_not_allowed">Error starting trip\n\nFailed to create a new trip because the last trip ended recently</string>
+</resources>

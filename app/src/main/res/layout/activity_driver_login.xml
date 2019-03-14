@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+    <EditText
+        android:id="@+id/et_driver_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Driver Id"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/et_driver_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_driver_id"
+        android:layout_marginTop="10dp"
+        android:hint="Pin"
+        android:inputType="numberPassword" />
+
+    <Button
+        android:id="@+id/bt_driver_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_driver_password"
+        android:layout_marginTop="10dp"
+        android:text="Log In" />
+
+    <TextView
+        android:id="@+id/tv_driver"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/bt_driver_login"
+        android:layout_marginTop="10dp" />
+</RelativeLayout>

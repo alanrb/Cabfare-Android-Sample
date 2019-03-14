@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RiderTripActivity">
+
+    <Button
+        android:id="@+id/bt_retry"
+        android:layout_width="match_parent"
+        android:visibility="invisible"
+        android:layout_height="wrap_content"
+        android:text="Get driver details" />
+
+    <TextView
+        android:id="@+id/tv_ranged_beacons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/tv_rider"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:gravity="center"
+        android:text="@string/msg_trip_not_found" />
+
+    <Button
+        android:id="@+id/bt_start_monitoring"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Trip"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/bt_cancel_trip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel Trip"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/bt_sign_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign Out" />
+</LinearLayout>
