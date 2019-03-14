@@ -64,73 +64,65 @@ This is an example on how you should register for intents:
 `this` is the context
 
 ```kotlin
-override fun onStart() {
-    super.onStart()
-    val intentFilter = IntentFilter(CabFare.ACTION_CABFARE_TRIP_UPDATED)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_NOT_FOUND)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_CANCELLED)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_CANCEL_ERROR)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_ENDED)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_END_ERROR)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_SHIFT_STARTED)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_SHIFT_START_ERROR)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_SHIFT_ENDED)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_SHIFT_END_ERROR)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_PAID)
-    intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_PAY_ERROR)
-    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter)
+override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        CabFare.getInstance().registerCabFareEventListener(cabFareEventListener)
 }
 ```
 
-This is an example on how we can listen to the broadcast of intents:
+This is an example on how we can listen to Cabfare events:
 ```kotlin
-private val broadcastReceiver = object : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        when (intent?.action) {
-            CabFare.ACTION_CABFARE_SHIFT_STARTED ->
-                // When this action happen shift has started
-                // do something here
-            CabFare.ACTION_CABFARE_SHIFT_START_ERROR -> {
-                // Shift cannot be started because of error
-                // do something here
+private val cabFareEventListener = object : CabFareEventListener {
+        override fun onEvent(cabFareEvent: CabFareEvent, data: Bundle) {
+            if (isFinishing)
+                return
+            when (intent?.action) {
+                CabFare.ACTION_CABFARE_SHIFT_STARTED ->
+                    // When this action happen shift has started
+                    // do something here
+                CabFare.ACTION_CABFARE_SHIFT_START_ERROR -> {
+                    // Shift cannot be started because of error
+                    // do something here
+                }
+                CabFare.ACTION_CABFARE_TRIP_UPDATED -> {
+                    // Trip info has been updated
+                    // do something here
+                }
+                CabFare.ACTION_CABFARE_SHIFT_ENDED -> {
+                    // When this action happen shift has ended
+                    // do something here
+                }
+                else ->
+                    // You might want to handle other intent action
             }
-            CabFare.ACTION_CABFARE_TRIP_UPDATED -> {
-                // Trip info has been updated
-                // do something here
-            }
-            CabFare.ACTION_CABFARE_SHIFT_ENDED -> {
-                // When this action happen shift has ended
-                // do something here
-            }
-            else ->
-                // You might want to handle other intent action
         }
-
-    }
 }
 ```
 
-Depending on the activity, you might want to receive other broadcast event only for someother events as 
+Depending on the activity, you might only care about specific events as 
 shown in the example below
 
 ```kotlin
-private val broadcastReceiver = object : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        when (intent?.action) {
-            CabFare.ACTION_CABFARE_TRIP_UPDATED -> updateCurrentTripDetails(intent.getStringExtra(Constants.BROADCAST_MESSAGE))
-            CabFare.ACTION_CABFARE_TRIP_PAID -> showFinishedPopup()
-            CabFare.ACTION_CABFARE_TRIP_CANCELLED,
-            CabFare.ACTION_CABFARE_TRIP_NOT_FOUND -> showCancelledPopup()
-            CabFare.ACTION_CABFARE_SHIFT_ENDED -> finish()
-            else -> driverTV.setText(intent?.action)
-        }
-    }
-}
-```
+private val cabFareEventListener = object : CabFareEventListener {
+        override fun onEvent(cabFareEvent: CabFareEvent, data: Bundle) {
+            if (isFinishing)
+                return
 
-Please remeber to unregister the intents when you don't want to listen to the intents anymore 
-```kotlin
-LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+            when (cabFareEvent) {
+                CabFareEvent.BEACON_RANGED -> // Updated List of Beacons
+                CabFareEvent.TRIP_ENDED -> // Trip Ended
+                CabFareEvent.TRIP_UPDATED -> // Trip Updated
+                CabFareEvent.TRIP_PAID -> // Trip Paid for
+                CabFareEvent.TRIP_CANCELLED -> // Trip Cancelled
+                CabFareEvent.TRIP_NOT_FOUND -> // Trip Not Found
+                CabFareEvent.SHIFT_ENDED -> // Driver Shift Ended
+                else -> {
+                /* Do Nothing*/
+                }
+            }
+        }
+}
 ```
 
 ### Ending a Driver trip
@@ -178,67 +170,36 @@ CBFRider.getInstance().signIn(this,
                         )
 ```
 
-Similar to Driver, as Rider you will need to listen to broadcast event.
+Similar to Driver, as Rider you will need to listen to cabfare events.
 ```kotlin
-override fun onStart() {
-        super.onStart()
-        val intentFilter = IntentFilter(CabFare.ACTION_CABFARE_TRIP_STARTED)
-        intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_UPDATED)
-        intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_START_FAILED)
-        intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_NOT_FOUND)
-        intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_CANCELLED)
-        intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_CANCEL_ERROR)
-        intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_ENDED)
-        intentFilter.addAction(CabFare.ACTION_CABFARE_TRIP_END_ERROR)
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter)
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        CabFare.getInstance().registerCabFareEventListener(cabFareEventListener)
+}
 ```
 
 Depending on the relevant events, you might want to handle it accordingly.
 ```kotlin
-private val broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                CabFare.ACTION_CABFARE_TRIP_UPDATED -> {
-                    val tripDetails = CBFRider.getInstance().getCurrentTrip(false)
+private val cabFareEventListener = object : CabFareEventListener {
+        override fun onEvent(cabFareEvent: CabFareEvent, data: Bundle) {
+            if (isFinishing)
+                return
 
-                    if(tripDetails?.driver == null)
-                        return
-
-                    bt_cancel_trip.visibility = View.VISIBLE
-                    var text = String.format("Trip Id: %s", tripDetails.tripId)
-                    text = String.format("%s\nDriver Id: %s", text, tripDetails.driver?.driverId)
-                    text = String.format("%s\nDriver Name: %s", text, tripDetails.driver?.firstName)
-                    text = String.format("%s\nCompany: %s", text, tripDetails.driver?.company)
-                    text = String.format("%s\nVehicle Id: %s", text, tripDetails.vehicle.registrationNumber)
-
-                    val tripStart = Calendar.getInstance()
-                    val df = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'", Locale.getDefault())
-                    df.timeZone = TimeZone.getTimeZone("UTC");
-                    tripStart.time = df.parse(tripDetails.pickupTime)
-                    val sinceMilli = Calendar.getInstance().timeInMillis - tripStart.timeInMillis
-                    val hour = (sinceMilli / (60 * 60 * 1000)).toInt()
-                    val minutes = ((sinceMilli / (60 * 1000)) % 60).toInt()
-                    val timeSince = String.format(Locale.getDefault(), "%02d:%02d", hour, minutes)
-                    text = String.format("%s\nProgress Time: %s", text, timeSince)
-
-                    text = String.format("%s\nPick Up: %s", text, tripDetails.pickupLocation.name)
-                    text = String.format("%s\nTrip Status: %s", text, tripDetails.tripStatus().name)
-                    text = String.format("%s\n\n%s", text, intent.getStringExtra(Constants.BROADCAST_MESSAGE))
-                    tv_rider.text = text
+            hideLoading()
+            Log.d("RiderTripActivity", cabFareEvent.name)
+            when (cabFareEvent) {
+                CabFareEvent.BEACON_PAIRED -> // Paired with a beacon
+                CabFareEvent.TRIP_STARTED -> // Trip started
+                CabFareEvent.TRIP_UPDATED -> // Trip details updated
+                CabFareEvent.TRIP_NOT_FOUND -> // Trip not found
+                CabFareEvent.TRIP_START_FAILED -> // Error when trying to start a trip
+                else -> {
+                /* Do Nothing*/
                 }
-                CabFare.ACTION_CABFARE_TRIP_START_FAILED -> bt_retry.visibility = View.VISIBLE
-                CabFare.ACTION_CABFARE_TRIP_ENDED -> showTripEndPopup("Journey Completed")
-                CabFare.ACTION_CABFARE_TRIP_CANCELLED -> showTripEndPopup("Trip Cancelled")
-                else -> tv_rider.setText(intent?.action)
             }
         }
-    }
-```
-
-Please remeber to unregister the intents when you don't want to listen to the intents anymore 
-```kotlin
-LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+}
 ```
 
 ## Shift
@@ -251,24 +212,9 @@ Every driver in Cabfare will need to start a shift before they are ready for a j
 CBFDriver.getInstance().startShift(this)
 ```
 
-After the shift started, the Cabfare SDK will broadcast intents with different action which you might want to action on.
+After the shift started, the Cabfare SDK will start emitting different events which you might want to take action on.
 
 ## Trip
 Every driver in Cabfare will be paired automatically with a rider as soon as the rider enter the vehicle. The rider in Cabfare SDK will have the ability to start trip automatically. Driver will automatically paired to the trip in the same vehicle that the rider is in.
 
-All the events will be broaccasted by the LocalBroadcastManager.
-
-## Push Notification
-Please implement the the following for push notification.  Cabfare will only handle push notifications that comes for the SDK ignoring the rest.
-
-```kotlin
-FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(activity) { instanceIdResult ->
-                                            val newToken = instanceIdResult.token
-                                            newToken.let {
-                                                notificationsUseCaseFactory.setFirebaseTokenUseCase(it).buildObservable()
-                                                        .subscribe {
-                                                            callback.onSuccess(result)
-                                                        }
-                                            }
-                                        }
-```
+All the events will be emitted via the CabFareEventListener.
