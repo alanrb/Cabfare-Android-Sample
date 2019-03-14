@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
-            else -> {
+            else-> {
                 findViewById<Button>(R.id.bt_rider_login)
                         .setOnClickListener {
                             showLoading()
