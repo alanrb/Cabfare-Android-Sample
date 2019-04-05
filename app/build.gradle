@@ -48,7 +48,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     //Cabfare Dependencies
-    implementation 'com.cabfare.android:sdk:0.0.21'
+    implementation 'com.cabfare.android:sdk:0.0.23'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation "com.squareup.retrofit2:adapter-rxjava:2.4.0"
